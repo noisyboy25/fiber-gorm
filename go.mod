@@ -4,7 +4,10 @@ go 1.18
 
 require github.com/gofiber/fiber/v2 v2.35.0
 
+require github.com/daaku/go.zipexe v1.0.0 // indirect
+
 require (
+	github.com/GeertJohan/go.rice v1.0.2
 	github.com/andybalholm/brotli v1.0.4 // indirect
 	github.com/klauspost/compress v1.15.0 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect

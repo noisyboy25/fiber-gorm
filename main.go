@@ -4,7 +4,9 @@ import (
 	"log"
 	"mime"
 
+	rice "github.com/GeertJohan/go.rice"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/filesystem"
 )
 
 type Text struct {
@@ -18,7 +20,7 @@ func main() {
 
 	app := fiber.New()
 
-	app.Static("/", "/vite-project/dist")
+	app.Use("/", filesystem.New(filesystem.Config{Root: rice.MustFindBox("vite-project/dist").HTTPBox()}))
 
 	api := app.Group("/api")
 	api.Get("/hello", func(c *fiber.Ctx) error {
