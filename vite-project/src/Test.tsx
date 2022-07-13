@@ -4,9 +4,14 @@ const Test = () => {
   const [list, setList] = useState<string[]>([]);
   const [text, setText] = useState('');
 
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    addList(text);
+  const clear = () => {
+    setText('');
+  };
+
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    await addList(text);
+    clear();
   };
 
   const getList = async () => {
