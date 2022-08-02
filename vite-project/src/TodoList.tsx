@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import './Test.css';
+import './Todo.css';
 
-type Text = {
+type Todo = {
   id: number;
   text: string;
 };
 
-const Test = () => {
-  const [list, setList] = useState<Text[]>([]);
+const TodoList = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [text, setText] = useState('');
 
   const clear = () => {
@@ -16,33 +16,33 @@ const Test = () => {
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    await addList(text);
+    await addTodos(text);
     clear();
   };
 
-  const getList = async () => {
-    const res = await fetch('/api/list');
+  const getTodos = async () => {
+    const res = await fetch('/api/todos');
     const json = await res.json();
-    setList(json.list);
+    setTodos(json.todos);
   };
 
-  const addList = async (inputText: string) => {
-    await fetch('/api/list', {
+  const addTodos = async (inputText: string) => {
+    await fetch('/api/todos', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ text: inputText }),
     });
-    await getList();
+    await getTodos();
   };
-  const deleteList = async (i: number) => {
-    const res = await fetch(`/api/list/${i}`, {
+  const deleteTodos = async (i: number) => {
+    const res = await fetch(`/api/todos/${i}`, {
       method: 'DELETE',
     });
-    if (res.ok) getList();
+    if (res.ok) getTodos();
   };
 
   useEffect(() => {
-    getList();
+    getTodos();
   }, []);
 
   return (
@@ -58,10 +58,10 @@ const Test = () => {
         />
       </form>
       <ul>
-        {list.map((el) => (
-          <React.Fragment key={el.id}>
-            <p>{el.text}</p>
-            <button onClick={() => deleteList(el.id)}>x</button>
+        {todos.map((todo) => (
+          <React.Fragment key={todo.id}>
+            <p>{todo.text}</p>
+            <button onClick={() => deleteTodos(todo.id)}>x</button>
           </React.Fragment>
         ))}
       </ul>
@@ -69,4 +69,4 @@ const Test = () => {
   );
 };
 
-export default Test;
+export default TodoList;

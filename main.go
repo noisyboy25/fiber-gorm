@@ -11,7 +11,7 @@ import (
 	"gorm.io/gorm/clause"
 )
 
-type Text struct {
+type Todo struct {
 	ID   uint   `json:"id" gorm:"primaryKey; not null"`
 	Text string `json:"text"`
 }
@@ -24,13 +24,13 @@ func init() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	db.AutoMigrate(&Text{})
+	db.AutoMigrate(&Todo{})
 }
 
 func main() {
 	mime.AddExtensionType(".js", "text/javascript")
 
-	one := Text{ID: 1, Text: "one"}
+	one := Todo{ID: 1, Text: "one"}
 	result := db.Clauses(clause.OnConflict{DoNothing: true}).Create(&one)
 	if result.Error != nil {
 		log.Printf("Cannot create one: %s", result.Error)
@@ -44,16 +44,16 @@ func main() {
 	api.Get("/hello", func(c *fiber.Ctx) error {
 		return c.JSON(fiber.Map{"message": "Hello, World!"})
 	})
-	api.Get("/list", func(c *fiber.Ctx) error {
-		list := []Text{}
-		result := db.Find(&list)
+	api.Get("/todos", func(c *fiber.Ctx) error {
+		todos := []Todo{}
+		result := db.Find(&todos)
 		if result.Error != nil {
 			return result.Error
 		}
-		return c.JSON(fiber.Map{"list": list})
+		return c.JSON(fiber.Map{"todos": todos})
 	})
-	api.Post("/list", func(c *fiber.Ctx) error {
-		t := &Text{}
+	api.Post("/todos", func(c *fiber.Ctx) error {
+		t := &Todo{}
 		if err := c.BodyParser(t); err != nil {
 			log.Println(err)
 			return err
@@ -64,12 +64,12 @@ func main() {
 		}
 		return c.JSON(fiber.Map{"create": t})
 	})
-	api.Delete("/list/:id", func(c *fiber.Ctx) error {
+	api.Delete("/todos/:id", func(c *fiber.Ctx) error {
 		id, err := strconv.Atoi(c.Params("id"))
 		if err != nil {
 			return err
 		}
-		result := db.Delete(&Text{}, id)
+		result := db.Delete(&Todo{}, id)
 		if result.Error != nil {
 			return result.Error
 		}

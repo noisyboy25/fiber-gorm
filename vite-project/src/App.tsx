@@ -1,10 +1,10 @@
 import './App.css';
-import Test from './Test';
+import TodoList from './TodoList';
 
 function App() {
   return (
     <div className="App">
-      <Test />
+      <TodoList />
     </div>
   );
 }
