@@ -5,8 +5,8 @@ import (
 	"mime"
 	"strconv"
 
+	"github.com/glebarez/sqlite"
 	"github.com/gofiber/fiber/v2"
-	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 )
@@ -38,7 +38,7 @@ func main() {
 
 	app := fiber.New()
 
-	app.Static("/", "/vite-project/dist")
+	app.Static("/", "vite-project/dist")
 
 	api := app.Group("/api")
 	api.Get("/hello", func(c *fiber.Ctx) error {
