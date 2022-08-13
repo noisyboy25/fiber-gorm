@@ -118,7 +118,7 @@ func main() {
 			return errors.New("wrong username or password")
 		}
 
-		return c.JSON(fiber.Map{"user": user})
+		return c.JSON(fiber.Map{"username": user.Username, "message": "user logged in successfully"})
 	})
 	auth.Post("/register", func(c *fiber.Ctx) error {
 		a := &AuthPair{}
@@ -137,7 +137,7 @@ func main() {
 			}
 			return result.Error
 		}
-		return c.JSON(fiber.Map{"user": user})
+		return c.JSON(fiber.Map{"message": "user created successfully"})
 	})
 
 	app.Listen(":3000")
