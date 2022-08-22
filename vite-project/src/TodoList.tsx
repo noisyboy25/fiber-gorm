@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import { AuthContext } from './App';
 import './Todo.css';
 
 type Todo = {
@@ -9,6 +10,8 @@ type Todo = {
 const TodoList = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [text, setText] = useState('');
+
+  const { auth } = useContext(AuthContext);
 
   const clear = () => {
     setText('');
@@ -27,18 +30,29 @@ const TodoList = () => {
   };
 
   const addTodos = async (inputText: string) => {
-    await fetch('/api/todos', {
+    const res = await fetch('/api/todos', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Basic ${localStorage.getItem('auth')}`,
+      },
       body: JSON.stringify({ text: inputText }),
     });
+    if (!res.ok) {
+      console.log(await res.text());
+    }
     await getTodos();
   };
+
   const deleteTodos = async (i: number) => {
     const res = await fetch(`/api/todos/${i}`, {
       method: 'DELETE',
+      headers: {
+        Authorization: `Basic ${localStorage.getItem('auth')}`,
+      },
     });
     if (res.ok) getTodos();
+    else console.log(await res.text());
   };
 
   useEffect(() => {
@@ -61,7 +75,7 @@ const TodoList = () => {
         {todos.map((todo) => (
           <React.Fragment key={todo.id}>
             <p>{todo.text}</p>
-            <button onClick={() => deleteTodos(todo.id)}>x</button>
+            {auth && <button onClick={() => deleteTodos(todo.id)}>x</button>}
           </React.Fragment>
         ))}
       </ul>

@@ -1,14 +1,27 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import { AuthContext } from './App';
 
 const Auth = () => {
   enum AuthMode {
-    Login = 'login',
+    Login = 'logIn',
     Register = 'register',
   }
 
-  const [auth, setAuth] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+
+  const { auth, setAuth } = useContext(AuthContext);
+
+  const logOut = () => {
+    localStorage.removeItem('auth');
+    setAuth('');
+  };
+
+  useEffect(() => {
+    (() => {
+      setAuth(localStorage.getItem('auth') ?? '');
+    })();
+  }, []);
 
   const submit = async (event: React.FormEvent, mode: AuthMode) => {
     event.preventDefault();
@@ -23,12 +36,13 @@ const Auth = () => {
     const data = await res.json();
     console.log(data);
 
-    setAuth(data.username);
+    localStorage.setItem('auth', data.auth);
+    setAuth(localStorage.getItem('auth') ?? '');
   };
 
   return (
     <div>
-      {auth || (
+      {!auth ? (
         <form onSubmit={(e) => submit(e, AuthMode.Login)}>
           <div>
             <input
@@ -48,11 +62,17 @@ const Auth = () => {
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-          <button>Login</button>
+          <button>Log In</button>
           <button type="button" onClick={(e) => submit(e, AuthMode.Register)}>
             Register
           </button>
         </form>
+      ) : (
+        <div>
+          Logged in as{' '}
+          <span style={{ fontWeight: 600 }}>{auth.split(':')[0]}</span>
+          <button onClick={logOut}>Log Out</button>
+        </div>
       )}
     </div>
   );
