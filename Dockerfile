@@ -16,12 +16,9 @@ WORKDIR /server
 
 COPY go.mod ./
 COPY go.sum ./
+RUN go mod download
 
-COPY model/*.go ./model
-COPY auth/*.go ./auth
-RUN go mod tidy
-
-COPY *.go ./
+COPY . ./
 
 RUN go build -o /fiber-gorm
 
