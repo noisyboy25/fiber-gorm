@@ -12,6 +12,8 @@ RUN yarn build
 # Build server
 FROM golang:alpine AS server_builder
 
+RUN apk add build-base
+
 WORKDIR /server
 
 COPY go.mod ./
