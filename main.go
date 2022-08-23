@@ -124,7 +124,7 @@ func main() {
 			}
 			return result.Error
 		}
-		return c.JSON(fiber.Map{"message": "user created successfully"})
+		return c.JSON(fiber.Map{"auth": fmt.Sprintf("%s:%s", user.Username, user.Password), "message": "user created successfully"})
 	})
 
 	app.Listen(":3000")
