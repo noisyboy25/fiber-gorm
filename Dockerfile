@@ -19,7 +19,7 @@ COPY go.sum ./
 
 COPY model/*.go ./model
 COPY auth/*.go ./auth
-RUN go mod download
+RUN go mod tidy
 
 COPY *.go ./
 
