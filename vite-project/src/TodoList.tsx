@@ -61,16 +61,18 @@ const TodoList = () => {
 
   return (
     <div>
-      <form onSubmit={onSubmit}>
-        <input
-          type="text"
-          name="text"
-          id="text"
-          onChange={(event) => setText(event.target.value)}
-          value={text}
-          autoComplete="off"
-        />
-      </form>
+      {auth && (
+        <form onSubmit={onSubmit}>
+          <input
+            type="text"
+            name="text"
+            id="text"
+            onChange={(event) => setText(event.target.value)}
+            value={text}
+            autoComplete="off"
+          />
+        </form>
+      )}
       <ul>
         {todos.map((todo) => (
           <React.Fragment key={todo.id}>
