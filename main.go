@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"mime"
+	"os"
 	"strconv"
 
 	"github.com/gofiber/fiber/v2"
@@ -127,5 +128,9 @@ func main() {
 		return c.JSON(fiber.Map{"auth": fmt.Sprintf("%s:%s", user.Username, user.Password), "message": "user created successfully"})
 	})
 
-	app.Listen(":3000")
+	port, ok := os.LookupEnv("PORT")
+	if !ok {
+		port = "3000"
+	}
+	app.Listen(":" + port)
 }
