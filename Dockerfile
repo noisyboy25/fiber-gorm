@@ -19,6 +19,8 @@ COPY go.sum ./
 RUN go mod download
 
 COPY *.go ./
+COPY model/*.go ./model
+COPY auth/*.go ./auth
 
 RUN go build -o /fiber-gorm
 
