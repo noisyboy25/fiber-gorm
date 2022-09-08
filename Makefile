@@ -11,3 +11,9 @@ build-client:
 
 run: 
 	go run .
+
+dev-server:
+	go run .
+
+dev-client:
+	cd vite-project && yarn dev  
