@@ -1,7 +1,11 @@
-ul {
-  list-style: none;
+.list {
   display: grid;
-  grid-template-columns: 1fr 3.5em;
+  grid-template-columns: 1fr 1fr 3.5em;
   padding: 0;
   gap: 1em;
+  margin-top: 3em;
+}
+
+.list .author {
+  font-weight: 600;
 }

@@ -33,7 +33,7 @@ func New(config Config) fiber.Handler {
 		if user.Password != authPair.Password {
 			return c.SendStatus(401)
 		}
-		c.Locals("auth", authPair)
+		c.Locals("auth", user)
 		return c.Next()
 	}
 }

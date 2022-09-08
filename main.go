@@ -52,7 +52,7 @@ func main() {
 	})
 	api.Get("/todos", func(c *fiber.Ctx) error {
 		todos := []model.Todo{}
-		result := db.Find(&todos)
+		result := db.Preload("User").Find(&todos)
 		if result.Error != nil {
 			return result.Error
 		}
@@ -64,6 +64,8 @@ func main() {
 			log.Println(err)
 			return err
 		}
+		auth := c.Locals("auth").(model.User)
+		t.User = &auth
 		result = db.Create(&t)
 		if result.Error != nil {
 			return result.Error
@@ -85,10 +87,11 @@ func main() {
 
 	api.Get("/users", func(c *fiber.Ctx) error {
 		users := []model.User{}
-		result := db.Preload("Todos").Find(&users)
+		result := db.Find(&users)
 		if result.Error != nil {
 			return result.Error
 		}
+		log.Printf("%v", users)
 
 		return c.JSON(fiber.Map{"users": users})
 	})
@@ -125,7 +128,7 @@ func main() {
 			}
 			return result.Error
 		}
-		return c.JSON(fiber.Map{"auth": fmt.Sprintf("%s:%s", user.Username, user.Password), "message": "user created successfully"})
+		return c.JSON(fiber.Map{"username": user.Username, "message": "user created successfully"})
 	})
 
 	port, ok := os.LookupEnv("PORT")

@@ -12,6 +12,6 @@ type Todo struct {
 type User struct {
 	gorm.Model
 	Username string `json:"username" gorm:"unique"`
-	Password string `json:"password"`
+	Password string `json:"-"`
 	Todos    []Todo `json:"todos"`
 }

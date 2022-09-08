@@ -5,6 +5,8 @@ import './Todo.css';
 type Todo = {
   id: number;
   text: string;
+  userId: string;
+  user: any;
 };
 
 const TodoList = () => {
@@ -73,14 +75,15 @@ const TodoList = () => {
           />
         </form>
       )}
-      <ul>
+      <div className="list">
         {todos.map((todo) => (
           <React.Fragment key={todo.id}>
+            <p className="author">{todo.user?.username || 'unknown'}</p>
             <p>{todo.text}</p>
             {auth && <button onClick={() => deleteTodos(todo.id)}>x</button>}
           </React.Fragment>
         ))}
-      </ul>
+      </div>
     </div>
   );
 };
